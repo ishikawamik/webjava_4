@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8">
+<title>買い物かご</title>
+<link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:fragment="logout" sec:authorize="isAuthenticated()">
+	<p>こんにちは:
+	<span sec:authentication="name"></span>さん</p>
+	<form action="#" th:action="@{/logout}" method="post">
+		<input type="submit" value="ログアウト" />
+	</form>
+	</div>
+<br>
+	<form action="#" th:action="@{/cart}"
+		th:object="${itemForm}" method="post">
+		<span class="alert"  th:if = "${totalOrder} == 0">
+		カートに商品が入っていません。
+		<br>
+		</span>
+		<span th:unless="${totalOrder} == 0">▼買い物かご履歴</span>
+		<table th:unless="${totalOrder} == 0" border="1">
+		<tr>
+			<th>商品名</th>
+			<th>価格</th>
+			<th>個数</th>
+		</tr>
+		<th:block th:each="order, iterstat : ${orderList}">
+			<tr>
+				<td th:value="${order.item.itemName}" th:text="${order.item.itemName}"></td>
+				<td th:value="${order.item.price}" th:text="${order.item.price}">円</td>
+				<td th:value="${order.num}" th:text="${order.num}">円</td>
+			</tr>
+		</th:block>
+		</table>
+		<br>
+		<span>▼合計</span>
+		<br>
+		<span>購入金額：</span>
+		<span class="totalPrice" th:text="${totalPrice}"></span>
+		<span>円</span>
+		<br>
+		<span>購 入 数 ：</span>
+		<span class="totalOrder" th:text="${totalOrder}"></span>
+		<span>点</span>
+		<br>
+		<input type='submit' value='買い物かごの中身を削除' class='submit'>
+		<input type="button" onclick="location.href='/item'"value="戻る">
+	</form>
+</body>
+</html>

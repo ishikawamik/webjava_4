@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8" />
+<title>メニュー画面</title>
+<link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:fragment="logout" sec:authorize="isAuthenticated()">
+	<p>こんにちは:
+	<span sec:authentication="name"></span>さん</p>
+	<form action="#" th:action="@{/logout}" method="post">
+		<input type="submit" value="ログアウト" />
+	</form>
+	<br>
+	<form method="POST" action="#" th:action="@{/item}" th:object="${itemForm}">
+	<br>
+	<table border="1">
+		<tr>
+			<th>商品名</th>
+			<th>価格</th>
+			<th>数量</th>
+			<th>　</th>
+		</tr>
+		<th:block th:each="item, iterstat : ${itemList}">
+			<tr>
+				<td th:value="${item.itemName}" th:text="${item.itemName}"></td>
+				<td th:value="${item.price}" th:text="${item.price}">円</td>
+				<td>
+				<input type="number" min="0" max="100" value="0"
+							th:name="num + ${iterstat.count}" />
+				</td>
+				<td>
+				<input type="submit" name="order" value="購入" />
+				</td>
+			</tr>
+		</th:block>
+	</table>
+	<br>
+	<input type="button" onclick="location.href='/cart'"  value="買い物かごをみる" />
+	<br>
+	<span th:if = "${itemName}">
+	[[${itemName}]]を[[${num}]]個買い物かごに入れました。
+	</span>
+</form>
+<br><br><br>
+<input type="button" onclick="location.href='/manage'"  value="管理者はこちら" />
+	<br>
+</div>
+</body>
+</html>
